@@ -9,7 +9,6 @@ const models = require('./models/index');
 const logger = require('./lib/logger');
 
 const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
 
 const app = express();
 logger.info('app start');
@@ -23,6 +22,7 @@ models.sequelize.authenticate().then(() => {
   logger.info('DB connection success');
 
   // sequelize sync (table 생성)
+  // models.sequelize.sync({ force: true }).then(() => { // { force: true } : 테이블 강제 리프레쉬
   models.sequelize.sync().then(() => {
     logger.info('Sequelize sync success');
   }).catch((err) => {
@@ -41,7 +41,6 @@ app.use(bodyParser.urlencoded({ extend: true }));
 app.use(bodyParser.json());
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
